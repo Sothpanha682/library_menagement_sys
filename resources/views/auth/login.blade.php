@@ -7,8 +7,16 @@
     
     <div style="margin-left: auto; margin-right: auto; width: 100%; max-width: 28rem; margin-bottom: 1.5rem; text-align: center;" class="sm:mx-auto sm:w-full sm:max-w-md mb-6 text-center">
         <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 1rem;" class="flex justify-center items-center mb-4">
-            <svg style="width: 3rem; height: 3rem; color: #4f46e5; margin-right: 0.5rem;" class="w-12 h-12 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-            <span style="font-size: 2.25rem; font-weight: 800; color: #1e293b; letter-spacing: -0.02em;" class="text-4xl font-extrabold text-slate-900 tracking-tight">LibSys</span>
+            <img 
+                x-show="systemLogo.path"
+                :src="systemLogo.path" 
+                :alt="systemLogo.name"
+                style="width: 3rem; height: 3rem; margin-right: 0.5rem; object-fit: contain;"
+                class="w-12 h-12 mr-2 object-contain">
+            <svg 
+                x-show="!systemLogo.path"
+                style="width: 3rem; height: 3rem; color: #4f46e5; margin-right: 0.5rem;" class="w-12 h-12 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span style="font-size: 2.25rem; font-weight: 800; color: #1e293b; letter-spacing: -0.02em;" class="text-4xl font-extrabold text-slate-900 tracking-tight" x-text="systemLogo.name || 'LibSys'"></span>
         </div>
         <h2 style="font-size: 1.875rem; font-weight: 700; color: #1e293b;" class="text-2xl font-bold text-slate-800" x-text="authView === 'login' ? 'Sign in to your account' : 'Reset your password'"></h2>
         <p style="margin-top: 0.5rem; font-size: 0.875rem; color: #475569;" class="mt-2 text-sm text-slate-600" x-show="authView === 'login'">
@@ -52,11 +60,6 @@
                         </label>
                     </div>
 
-                    <div style="font-size: 0.875rem;">
-                        <a href="#" @click.prevent="authView = 'forgot'" style="color: #4f46e5; text-decoration: none; font-weight: 500;" class="font-medium text-indigo-600 hover:text-indigo-500 transition-colors">
-                            Forgot your password?
-                        </a>
-                    </div>
                 </div>
 
                 <div style="display: block; margin-bottom: 1.5rem;">

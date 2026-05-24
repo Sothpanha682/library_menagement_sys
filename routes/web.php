@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/', function () {
     return view('layouts.app');
@@ -19,8 +20,23 @@ Route::get('/dashboard', function () {
 
 // Authentication Routes
 Route::post('/api/auth/login', [AuthController::class, 'login']);
-Route::post('/api/auth/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-Route::get('/api/auth/user', [AuthController::class, 'getUser'])->middleware('auth:sanctum');
+Route::post('/api/auth/logout', [AuthController::class, 'logout'])->middleware('auth');
+Route::get('/api/auth/user', [AuthController::class, 'getUser'])->middleware('auth');
+Route::get('/api/auth/get-logo', [AuthController::class, 'getLogo']);
+Route::post('/api/auth/update-profile', [AuthController::class, 'updateProfile'])->middleware('auth');
+Route::post('/api/auth/change-password', [AuthController::class, 'changePassword'])->middleware('auth');
+Route::post('/api/auth/upload-profile-image', [AuthController::class, 'uploadProfileImage'])->middleware('auth');
+Route::post('/api/auth/upload-logo', [AuthController::class, 'uploadLogo'])->middleware('auth');
+
+// Notifications Routes
+Route::prefix('api/notifications')->middleware('auth')->group(function () {
+    Route::get('', [NotificationController::class, 'index']);           // GET all notifications
+    Route::post('', [NotificationController::class, 'store']);          // POST create notification
+    Route::patch('{notification}/read', [NotificationController::class, 'markAsRead']); // Mark as read
+    Route::patch('mark-all/read', [NotificationController::class, 'markAllAsRead']); // Mark all as read
+    Route::delete('{notification}', [NotificationController::class, 'destroy']); // Delete notification
+    Route::delete('', [NotificationController::class, 'destroyAll']); // Delete all notifications
+});
 
 // Books Inventory CRUD Routes
 Route::prefix('api/books')->group(function () {
@@ -47,3 +63,13 @@ Route::prefix('api/members')->group(function () {
     Route::patch('{member}', [MemberController::class, 'update']);       // PATCH update member
     Route::delete('{member}', [MemberController::class, 'destroy']);     // DELETE member
 });
+
+// Loans routes
+use App\Http\Controllers\LoanController;
+
+Route::prefix('api/loans')->group(function () {
+    Route::get('', [LoanController::class, 'index']); // list loans
+    Route::post('', [LoanController::class, 'store']); // issue loan
+    Route::patch('{loan}/return', [LoanController::class, 'markReturned']); // mark returned
+});
+

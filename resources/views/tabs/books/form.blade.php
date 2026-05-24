@@ -34,12 +34,6 @@
                     <input type="text" name="author" id="author" class="block w-full rounded-lg border-slate-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-4 py-2 border" x-model="bookForm.author" required placeholder="e.g., F. Scott Fitzgerald">
                 </div>
 
-                <!-- ISBN -->
-                <div>
-                    <label for="isbn" class="block text-sm font-medium text-slate-700 mb-1">ISBN Number</label>
-                    <input type="text" name="isbn" id="isbn" class="block w-full rounded-lg border-slate-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-4 py-2 border" x-model="bookForm.isbn" placeholder="e.g., 978-0743273565">
-                </div>
-
                 <!-- Category -->
                 <div>
                     <label for="category" class="block text-sm font-medium text-slate-700 mb-1">Category <span class="text-red-500">*</span></label>
@@ -56,13 +50,14 @@
                 <!-- Total Copies -->
                 <div>
                     <label for="copies" class="block text-sm font-medium text-slate-700 mb-1">Total Copies <span class="text-red-500">*</span></label>
-                    <input type="number" name="quantity" id="copies" min="1" class="block w-full rounded-lg border-slate-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-4 py-2 border" x-model="bookForm.quantity" required>
+                    <input type="number" name="quantity" id="copies" min="1" class="block w-full rounded-lg border-slate-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-4 py-2 border" x-model="bookForm.quantity" @change="syncAvailableCopies()" required>
                 </div>
 
                 <!-- Available Copies -->
                 <div>
                     <label for="available_quantity" class="block text-sm font-medium text-slate-700 mb-1">Available Copies <span class="text-red-500">*</span></label>
-                    <input type="number" name="available_quantity" id="available_quantity" min="0" class="block w-full rounded-lg border-slate-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-4 py-2 border" x-model="bookForm.available_quantity" required>
+                    <input type="number" name="available_quantity" id="available_quantity" class="block w-full rounded-lg border-slate-300 shadow-sm bg-slate-100 sm:text-sm px-4 py-2 border text-slate-600" x-model="bookForm.available_quantity" readonly>
+                    <p class="mt-1 text-xs text-slate-500">Auto-calculated based on total copies and active loans</p>
                 </div>
 
                 <!-- Published Year -->
@@ -71,10 +66,34 @@
                     <input type="number" name="published_year" id="published_year" min="1900" class="block w-full rounded-lg border-slate-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-4 py-2 border" x-model="bookForm.published_year" required>
                 </div>
 
-                <!-- Price -->
-                <div>
-                    <label for="price" class="block text-sm font-medium text-slate-700 mb-1">Price <span class="text-red-500">*</span></label>
-                    <input type="number" name="price" id="price" min="0" step="0.01" class="block w-full rounded-lg border-slate-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-4 py-2 border" x-model="bookForm.price" required>
+                <!-- Book Image -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-slate-700 mb-3">Book Cover Image</label>
+                    
+                    <!-- Image Preview -->
+                    <div x-show="bookForm.image" class="mb-4">
+                        <div class="relative inline-block">
+                            <img :src="bookForm.image" alt="Book cover preview" class="h-40 w-auto rounded-lg shadow-md border border-slate-200">
+                            <button type="button" @click="bookForm.image = ''" class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- URL Input -->
+                    <div class="mb-4">
+                        <label for="image_url" class="block text-xs font-medium text-slate-600 mb-1">Image URL</label>
+                        <input type="url" id="image_url" name="image_url" class="block w-full rounded-lg border-slate-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-4 py-2 border" x-model="bookForm.image" placeholder="https://example.com/book-cover.jpg">
+                    </div>
+
+                    <!-- File Upload -->
+                    <div class="mb-4">
+                        <label for="book_image" class="block text-xs font-medium text-slate-600 mb-1">Or Browse File</label>
+                        <div class="flex items-center gap-2">
+                            <input type="file" id="book_image" name="book_image" accept="image/*" @change="handleBookImageUpload" class="block flex-1 text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                            <span class="text-xs text-slate-500">(Max 5MB)</span>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Description -->

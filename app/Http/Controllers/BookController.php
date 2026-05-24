@@ -13,12 +13,22 @@ class BookController extends Controller
     public function index()
     {
         try {
-            $books = Book::all();
+            // Support pagination via query params: ?page=1&per_page=10
+            $perPage = (int) request()->query('per_page', 10);
+            $page = (int) request()->query('page', 1);
+
+            $paginator = Book::orderBy('created_at', 'desc')->paginate($perPage, ['*'], 'page', $page);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Books retrieved successfully',
-                'data' => $books,
-                'count' => count($books)
+                'data' => $paginator->items(),
+                'meta' => [
+                    'current_page' => $paginator->currentPage(),
+                    'per_page' => $paginator->perPage(),
+                    'total' => $paginator->total(),
+                    'last_page' => $paginator->lastPage(),
+                ],
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -50,13 +60,13 @@ class BookController extends Controller
             $validated = $request->validate([
                 'title' => 'required|string|max:255',
                 'author' => 'required|string|max:255',
-                'isbn' => 'required|string|unique:books,isbn|max:20',
                 'published_year' => 'required|integer|min:1900|max:' . date('Y'),
                 'category' => 'required|string|max:100',
                 'quantity' => 'required|integer|min:1',
                 'available_quantity' => 'required|integer|min:0',
                 'description' => 'nullable|string',
-                'price' => 'required|numeric|min:0',
+                // Allow image data (base64 or URL) if provided
+                'image' => 'nullable|string',
             ]);
 
             // Ensure available_quantity doesn't exceed quantity
@@ -135,13 +145,13 @@ class BookController extends Controller
             $validated = $request->validate([
                 'title' => 'sometimes|required|string|max:255',
                 'author' => 'sometimes|required|string|max:255',
-                'isbn' => 'sometimes|required|string|unique:books,isbn,' . $book->id . '|max:20',
                 'published_year' => 'sometimes|required|integer|min:1900|max:' . date('Y'),
                 'category' => 'sometimes|required|string|max:100',
                 'quantity' => 'sometimes|required|integer|min:1',
                 'available_quantity' => 'sometimes|required|integer|min:0',
                 'description' => 'nullable|string',
-                'price' => 'sometimes|required|numeric|min:0',
+                // Allow image data (base64 or URL) if provided
+                'image' => 'nullable|string',
             ]);
 
             // Check if available_quantity exceeds quantity (if both are being updated)

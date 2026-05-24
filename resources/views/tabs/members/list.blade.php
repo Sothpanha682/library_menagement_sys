@@ -32,7 +32,7 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div class="h-10 w-10 flex-shrink-0 bg-slate-200 rounded-full flex items-center justify-center text-slate-600 font-bold overflow-hidden">
-                                        <img :src="'https://ui-avatars.com/api/?name=' + member.name + '&background=e2e8f0&color=475569'" :alt="member.name" class="w-full h-full object-cover">
+                                        <img :src="member.profile_image || ('/images/avatar.png')" :alt="member.name" class="w-full h-full object-cover">
                                     </div>
                                     <div class="ml-4">
                                         <div class="text-sm font-medium text-slate-900" x-text="member.name"></div>

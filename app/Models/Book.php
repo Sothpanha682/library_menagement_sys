@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 
-#[Fillable(['title', 'author', 'isbn', 'published_year', 'category', 'quantity', 'available_quantity', 'description', 'price'])]
+#[Fillable(['title', 'author', 'published_year', 'category', 'quantity', 'available_quantity', 'description', 'image'])]
 class Book extends Model
 {
     use HasFactory;
@@ -16,20 +16,18 @@ class Book extends Model
     protected $fillable = [
         'title',
         'author',
-        'isbn',
         'published_year',
         'category',
         'quantity',
         'available_quantity',
         'description',
-        'price',
+        'image',
     ];
 
     protected $casts = [
         'published_year' => 'integer',
         'quantity' => 'integer',
         'available_quantity' => 'integer',
-        'price' => 'decimal:2',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

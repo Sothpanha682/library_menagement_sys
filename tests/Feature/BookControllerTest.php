@@ -56,6 +56,39 @@ class BookControllerTest extends TestCase
     }
 
     /**
+     * Test creating a new book with image
+     */
+    public function test_create_book_with_image(): void
+    {
+        $bookData = [
+            'title' => 'Book With Image',
+            'author' => 'Test Author',
+            'published_year' => 2023,
+            'category' => 'Fiction',
+            'quantity' => 5,
+            'available_quantity' => 5,
+            'description' => 'A test book with an image',
+            'image' => 'https://example.com/cover.jpg',
+        ];
+
+        $response = $this->postJson('/api/books', $bookData);
+
+        $response->assertStatus(201)
+            ->assertJson([
+                'success' => true,
+                'message' => 'Book created successfully',
+                'data' => [
+                    'image' => 'https://example.com/cover.jpg',
+                ],
+            ]);
+
+        $this->assertDatabaseHas('books', [
+            'title' => 'Book With Image',
+            'image' => 'https://example.com/cover.jpg',
+        ]);
+    }
+
+    /**
      * Test getting a single book
      */
     public function test_get_single_book(): void
