@@ -38,26 +38,13 @@ copy .env.example .env
 composer install --no-interaction --prefer-dist
 ```
 
-4. Install JS dependencies and build assets (development)
-
-```powershell
-npm install
-npm run dev
-```
-
-Or for production build:
-
-```powershell
-npm run build
-```
-
-5. Generate application key
+4. Generate application key
 
 ```powershell
 php artisan key:generate
 ```
 
-6. Run migrations and seeders
+5. Run migrations and seeders
 
 ```powershell
 php artisan migrate --seed
@@ -67,13 +54,13 @@ Notes:
 - If you want to run only migrations without seeding: `php artisan migrate`
 - To seed the demo data specifically: `php artisan db:seed --class=LibraryDemoSeeder`
 
-7. Link storage (for user/book images)
+6. Link storage (for user/book images)
 
 ```powershell
 php artisan storage:link
 ```
 
-8. Serve the application
+7. Serve the application
 
 ```powershell
 php artisan serve --host=127.0.0.1 --port=8000
